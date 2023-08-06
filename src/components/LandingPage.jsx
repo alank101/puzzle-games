@@ -1,12 +1,15 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import Unruly from '../images/Unruly.png'
 
 export default function LandingPage() {
     return (
         <>
-            <div>
-                <Link to='/Unruly'>Unruly</Link>
-            </div>
+            <Link to='/Unruly'>
+                <img src={Unruly} alt='' className="w-1/6"/>
+                Unruly
+            </Link>
+
         </>
     )
 }
