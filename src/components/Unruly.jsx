@@ -11,8 +11,8 @@ export default function Unruly() {
     const [currentBoardArray, setCurrentBoardArray] = useState([])
 
     useEffect(() => {
-        newGame();
-    }, []);
+        newGame(selectedBoardSize);
+    }, [selectedBoardSize]);
 
     const colorMapping = {
         0: 'bg-transparent border-black',
@@ -23,26 +23,34 @@ export default function Unruly() {
     }
 
     function handleColorChange(rowIndex, colIndex) {
-        const newColors = colors.map((row) => [...row]);
+        const newColors = [...colors]
         const currentValue = newColors[rowIndex][colIndex];
         switch (currentValue) {
             case 1:
-                newColors[rowIndex][colIndex] = 2;
-                break;
+                newColors[rowIndex][colIndex] = 2
+                break
             case 2:
-                newColors[rowIndex][colIndex] = 0;
-                break;
+                newColors[rowIndex][colIndex] = 0
+                break
             case 3:
-                newColors[rowIndex][colIndex] = 2;
-                break;
+                newColors[rowIndex][colIndex] = 2
+                if (newColors[rowIndex][colIndex - 1] === 3) newColors[rowIndex][colIndex - 1] = 1
+                if (newColors[rowIndex][colIndex + 1] === 3) newColors[rowIndex][colIndex + 1] = 1
+                if (newColors[rowIndex - 1][colIndex] === 3) newColors[rowIndex - 1][colIndex] = 1
+                if (newColors[rowIndex + 1][colIndex] === 3) newColors[rowIndex + 1][colIndex] = 1
+                break
             case 4:
-                newColors[rowIndex][colIndex] = 0;
-                break;
+                newColors[rowIndex][colIndex] = 0
+                if (newColors[rowIndex][colIndex - 1] === 4) newColors[rowIndex][colIndex - 1] = 2
+                if (newColors[rowIndex][colIndex + 1] === 4) newColors[rowIndex][colIndex + 1] = 2
+                if (newColors[rowIndex - 1][colIndex] === 4) newColors[rowIndex - 1][colIndex] = 2
+                if (newColors[rowIndex + 1][colIndex] === 4) newColors[rowIndex + 1][colIndex] = 2
+                break
             default:
-                newColors[rowIndex][colIndex] = 1;
+                newColors[rowIndex][colIndex] = 1
         }
-        setColors(newColors);
-        checkRowsAndColumns(rowIndex, colIndex, newColors);
+        setColors(newColors)
+        checkProgress(rowIndex, colIndex)
     }
 
     function getRandomNumber() {
@@ -63,67 +71,51 @@ export default function Unruly() {
         setSelectedBoardSize(newBoardSize)
     }
 
-    function checkRowsAndColumns(rowIndex, colIndex, board) {
-        const row = board[rowIndex];
-        const column = board.map((row) => row[colIndex]);
+    function checkProgress(rowIndex, colIndex) {
+        const selectedValue = currentBoardArray[rowIndex][colIndex];
 
-        if (checkThreeInRow(row, rowIndex, colIndex, board)) {
-            markThreeInRow(row, rowIndex);
+        const isMatchingHorizontal = (value) => {
+            return (
+                currentBoardArray[rowIndex][colIndex - 1] === value &&
+                currentBoardArray[rowIndex][colIndex + 1] === value
+            );
+        };
+
+        const isMatchingVertical = (value) => {
+            return (
+                currentBoardArray[rowIndex - 1] &&
+                currentBoardArray[rowIndex + 1] &&
+                currentBoardArray[rowIndex - 1][colIndex] === value &&
+                currentBoardArray[rowIndex + 1][colIndex] === value
+            );
+        };
+
+        const updateCellsHorizontal = (value) => {
+            currentBoardArray[rowIndex][colIndex] = value;
+            currentBoardArray[rowIndex][colIndex - 1] = value;
+            currentBoardArray[rowIndex][colIndex + 1] = value;
+        };
+
+        const updateCellsVertical = (value) => {
+            currentBoardArray[rowIndex][colIndex] = value;
+            currentBoardArray[rowIndex - 1][colIndex] = value;
+            currentBoardArray[rowIndex + 1][colIndex] = value;
         }
 
-        if (checkThreeInRow(column, colIndex, rowIndex, board)) {
-            markThreeInRow(column, colIndex);
-        }
-    }
-
-    function checkThreeInRow(rowOrColumn, currentIndex, fixedIndex, board) {
-        if (rowOrColumn.length < 3) return false;
-
-        const currentColor = rowOrColumn[currentIndex];
-        const startIndex = findStartIndex(rowOrColumn, currentIndex);
-        const endIndex = findEndIndex(rowOrColumn, currentIndex);
-
-        return endIndex - startIndex >= 2 && checkColorSequence(rowOrColumn, startIndex, endIndex, currentColor);
-    }
-
-    function findStartIndex(array, currentIndex) {
-        let startIndex = currentIndex;
-        while (startIndex > 0 && array[startIndex - 1] === array[currentIndex]) {
-            startIndex--;
-        }
-        return startIndex;
-    }
-
-    function findEndIndex(array, currentIndex) {
-        let endIndex = currentIndex;
-        while (endIndex < array.length - 1 && array[endIndex + 1] === array[currentIndex]) {
-            endIndex++;
-        }
-        return endIndex;
-    }
-
-    function checkColorSequence(array, startIndex, endIndex, targetColor) {
-        for (let i = startIndex; i <= endIndex; i++) {
-            if (array[i] !== targetColor) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    function markThreeInRow(rowOrColumn, fixedIndex) {
-        const updatedColors = colors.map((row) => [...row]);
-
-        for (let i = 0; i < rowOrColumn.length; i++) {
-            const index = fixedIndex < colors.length ? i : fixedIndex;
-            const col = fixedIndex < colors.length ? fixedIndex : i;
-            const currentValue = rowOrColumn[i];
-            if (currentValue !== 0) {
-                updatedColors[index][col] = 3;
-            }
+        if ((selectedValue === 2 && isMatchingVertical(2) && isMatchingHorizontal(2)) ||
+            (selectedValue === 1 && isMatchingVertical(1) && isMatchingHorizontal(1))) {
+            updateCellsHorizontal(selectedValue === 2 ? 4 : 3);
+            updateCellsVertical(selectedValue === 2 ? 4 : 3);
+        } else if (selectedValue === 2 && isMatchingHorizontal(2)) {
+            updateCellsHorizontal(4);
+        } else if (selectedValue === 1 && isMatchingHorizontal(1)) {
+            updateCellsHorizontal(3);
+        } else if (selectedValue === 1 && isMatchingVertical(1)) {
+            updateCellsVertical(3);
+        } else if (selectedValue === 2 && isMatchingVertical(2)) {
+            updateCellsVertical(4);
         }
 
-        setColors(updatedColors);
     }
 
 
