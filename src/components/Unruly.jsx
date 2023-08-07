@@ -8,18 +8,17 @@ export default function Unruly() {
         return Array.from({ length: 8 }, () => Array.from({ length: 8 }, getRandomNumber));
     });
     const [selectedBoardSize, setSelectedBoardSize] = useState(8)
-    const [hasMoreThanHalf, setHasMoreThanHalf] = useState(false)
     const threeInRow = ' border-red-500'
-    const moreThanHalf = ' text-red-500 text-center p-2'
+    const moreThanHalf = ' text-center p-2'
 
     useEffect(() => {
         newGame(selectedBoardSize);
     }, [selectedBoardSize]);
 
     const colorMapping = {
-        0: 'bg-transparent border-black',
-        1: 'bg-black border-black',
-        2: 'bg-white border-black',
+        0: 'bg-transparent border-black text-transparent',
+        1: 'bg-black border-black text-black',
+        2: 'bg-white border-black text-white',
     }
 
     function handleColorChange(rowIndex, colIndex) {
@@ -59,16 +58,23 @@ export default function Unruly() {
         // Add the necessary logic to determine the classes for each cell based on the conditions
         let classes = colorMapping[value];
 
-        const counts = countColors(currentBoardArray);
+        const rowLength = currentBoardArray[0].length;
+        const counts = countColors(currentBoardArray[rowIndex]);
 
-        // Check if one color has more than half of the current board length
-        const boardLength = currentBoardArray.length * currentBoardArray[0].length;
+        let dominantColor = -1;
+        let dominantCount = -1;
         for (const color in counts) {
-            if (counts[color] > boardLength / 2) {
-                classes += moreThanHalf;
-                setHasMoreThanHalf(true)
-                break;
+            if (counts[color] > dominantCount) {
+                dominantColor = parseInt(color);
+                dominantCount = counts[color];
             }
+        }
+
+        if (value === dominantColor && dominantCount > rowLength / 2) {
+            // If the current cell has the dominant color and the dominant color has more than half in the row
+            classes += moreThanHalf
+            if (value === 2) classes = classes.replace('text-white', 'text-red-500')
+            if (value === 1) classes = classes.replace('text-black', 'text-red-500')
         }
 
         // Check if there are at least 3 consecutive cells of the same color in a row
@@ -82,12 +88,10 @@ export default function Unruly() {
         return classes;
     }
 
-    const countColors = (board) => {
+    const countColors = (row) => {
         const counts = { 0: 0, 1: 0, 2: 0 };
-        board.forEach((row) => {
-            row.forEach((cell) => {
-                counts[cell]++;
-            });
+        row.forEach((cell) => {
+            counts[cell]++;
         });
         return counts;
     };
@@ -124,11 +128,7 @@ export default function Unruly() {
                                     currentBoardArray
                                 )} border-4 m-2`}
                             >
-                                {hasMoreThanHalf ? (
-                                    <span className="absolute inset-0 flex items-center justify-center">
-                                        <span className="text-red-500 text-lg font-bold">!</span>
-                                    </span>
-                                ) : null}
+                                !
                             </div>
                         ))}
                     </div>
