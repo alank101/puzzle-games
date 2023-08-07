@@ -37,6 +37,49 @@ export default function Unruly() {
         setCurrentBoardArray(newColors)
     }
 
+    function threeInRowCheck(board, rowIndex, colIndex) {
+        const value = board[rowIndex][colIndex];
+
+        const isMatchingHorizontal = () => {
+            let count = 1;
+            let i = colIndex - 1;
+            while (i >= 0 && board[rowIndex][i] === value) {
+                count++;
+                i--;
+            }
+
+            i = colIndex + 1;
+            while (i < board[rowIndex].length && board[rowIndex][i] === value) {
+                count++;
+                i++;
+            }
+
+            return count >= 3;
+        };
+
+        const isMatchingVertical = () => {
+            let count = 1;
+            let i = rowIndex - 1;
+            while (i >= 0 && board[i][colIndex] === value) {
+                count++;
+                i--;
+            }
+
+            i = rowIndex + 1;
+            while (i < board.length && board[i][colIndex] === value) {
+                count++;
+                i++;
+            }
+
+            return count >= 3;
+        };
+
+        return {
+            isMatchingHorizontal,
+            isMatchingVertical,
+        };
+    }
+
     function getRandomNumber() {
         return Math.floor(Math.random() * 3);
     }
@@ -57,10 +100,9 @@ export default function Unruly() {
     function getCellClasses(value, rowIndex, colIndex, currentBoardArray) {
         // Add the necessary logic to determine the classes for each cell based on the conditions
         let classes = colorMapping[value];
-
         const rowLength = currentBoardArray[0].length;
         const counts = countColors(currentBoardArray[rowIndex]);
-
+        
         let dominantColor = -1;
         let dominantCount = -1;
         for (const color in counts) {
@@ -77,12 +119,16 @@ export default function Unruly() {
             if (value === 1) classes = classes.replace('text-black', 'text-red-500')
         }
 
-        // Check if there are at least 3 consecutive cells of the same color in a row
-        if (value !== 0) {
-            const row = currentBoardArray[rowIndex];
-            if (hasThreeInRow(row, value)) {
-                classes += threeInRow;
-            }
+
+
+        const { isMatchingHorizontal, isMatchingVertical } = threeInRowCheck(
+            currentBoardArray,
+            rowIndex,
+            colIndex
+        );
+
+        if (value !== 0 && (isMatchingHorizontal() || isMatchingVertical())) {
+            classes += threeInRow;
         }
 
         return classes;
@@ -94,21 +140,6 @@ export default function Unruly() {
             counts[cell]++;
         });
         return counts;
-    };
-
-    const hasThreeInRow = (row, color) => {
-        let count = 0;
-        for (let i = 0; i < row.length; i++) {
-            if (row[i] === color) {
-                count++;
-                if (count >= 3) {
-                    return true;
-                }
-            } else {
-                count = 0;
-            }
-        }
-        return false;
     };
 
 
