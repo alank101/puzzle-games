@@ -1,11 +1,11 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { getCellClasses, getRandomNumber } from './UnrulyFunctions'
+import { getCellClasses, generateSolvedBoard } from './UnrulyFunctions'
 
 export default function Unruly() {
     // const [colors, setColors] = useState(gameBoard)
     const [currentBoardArray, setCurrentBoardArray] = useState(() => {
-        return Array.from({ length: 8 }, () => Array.from({ length: 8 }, getRandomNumber));
+        return generateSolvedBoard(8)
     });
     const [selectedBoardSize, setSelectedBoardSize] = useState(8)
 
@@ -38,13 +38,9 @@ export default function Unruly() {
     }
 
     function newGame() {
-        const newBoard = Array.from({ length: selectedBoardSize }, () =>
-            Array.from({ length: selectedBoardSize }, getRandomNumber)
-        );
+        const newBoard = generateSolvedBoard(selectedBoardSize)
         setCurrentBoardArray(newBoard);
     }
-
-
 
     return (
         <div>
