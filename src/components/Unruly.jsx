@@ -96,29 +96,45 @@ export default function Unruly() {
         setSelectedBoardSize(newBoardSize)
     }
 
+    function getColumn(array, colIndex) {
+        return array.map((row) => row[colIndex]);
+    }
+
 
     function getCellClasses(value, rowIndex, colIndex, currentBoardArray) {
         // Add the necessary logic to determine the classes for each cell based on the conditions
         let classes = colorMapping[value];
-        const rowLength = currentBoardArray[0].length;
-        const counts = countColors(currentBoardArray[rowIndex]);
+        const boardLength = currentBoardArray[0].length;
         
-        let dominantColor = -1;
-        let dominantCount = -1;
-        for (const color in counts) {
-            if (counts[color] > dominantCount) {
-                dominantColor = parseInt(color);
-                dominantCount = counts[color];
+        const rowCounts = countColors(currentBoardArray[rowIndex]);
+        let rowDominantColor = -1;
+        let rowDominantCount = -1;
+        for (const color in rowCounts) {
+            if (rowCounts[color] > rowDominantCount) {
+                rowDominantColor = parseInt(color);
+                rowDominantCount = rowCounts[color];
             }
         }
-
-        if (value === dominantColor && dominantCount > rowLength / 2) {
-            // If the current cell has the dominant color and the dominant color has more than half in the row
+        if (value === rowDominantColor && rowDominantCount > boardLength / 2) {
             classes += moreThanHalf
             if (value === 2) classes = classes.replace('text-white', 'text-red-500')
             if (value === 1) classes = classes.replace('text-black', 'text-red-500')
         }
 
+        const columnCounts = countColors(getColumn(currentBoardArray, colIndex))
+        let columnDominantColor = -1;
+        let columnDominantCount = -1;
+        for (const color in columnCounts) {
+            if (columnCounts[color] > columnDominantCount) {
+                columnDominantColor = parseInt(color);
+                columnDominantCount = columnCounts[color];
+            }
+        }
+        if (value === columnDominantColor && columnDominantCount > boardLength / 2) {
+            classes += moreThanHalf
+            if (value === 2) classes = classes.replace('text-white', 'text-red-500')
+            if (value === 1) classes = classes.replace('text-black', 'text-red-500')
+        }
 
 
         const { isMatchingHorizontal, isMatchingVertical } = threeInRowCheck(
@@ -135,11 +151,11 @@ export default function Unruly() {
     }
 
     const countColors = (row) => {
-        const counts = { 0: 0, 1: 0, 2: 0 };
+        const rowCounts = { 0: 0, 1: 0, 2: 0 };
         row.forEach((cell) => {
-            counts[cell]++;
+            rowCounts[cell]++;
         });
-        return counts;
+        return rowCounts;
     };
 
 
