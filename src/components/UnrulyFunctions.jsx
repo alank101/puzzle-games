@@ -50,7 +50,7 @@ export function getRandomNumber() {
 
 
 
-export function getColumn(array, colIndex) {
+function getColumn(array, colIndex) {
     return array.map((row) => row[colIndex]);
 }
 
@@ -126,93 +126,3 @@ const countColors = (row) => {
     return rowCounts;
 };
 
-// Function to shuffle an array randomly
-function shuffleArray(arr) {
-    for (let i = arr.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [arr[i], arr[j]] = [arr[j], arr[i]];
-    }
-  }
-
-// Function to generate a solved board with the specified size
-export function generateSolvedBoard(size) {
-    const board = [];
-    for (let i = 0; i < size; i++) {
-      board.push(new Array(size).fill(0));
-    }
-  
-    // Helper function to check if the row has equal black and white squares
-    function isRowBalanced(row) {
-      let blackCount = 0;
-      let whiteCount = 0;
-      for (let i = 0; i < size; i++) {
-        if (board[row][i] === 1) {
-          blackCount++;
-        } else if (board[row][i] === 2) {
-          whiteCount++;
-        }
-      }
-      return blackCount === whiteCount;
-    }
-  
-    // Helper function to fill the row with equal black and white squares
-    function fillRow(row) {
-      const colors = new Array(size).fill(0).map((_, i) => i % 2 + 1);
-      shuffleArray(colors);
-  
-      for (let col = 0; col < size; col++) {
-        board[row][col] = colors[col];
-      }
-    }
-  
-    // Step 1: Fill each row with equal black and white squares
-    for (let row = 0; row < size; row++) {
-      fillRow(row);
-      while (!isRowBalanced(row)) {
-        fillRow(row);
-      }
-    }
-  
-    // Step 2: Shuffle the rows until columns are balanced
-    function shuffleRows() {
-      for (let row = 0; row < size; row++) {
-        fillRow(row);
-        while (!isRowBalanced(row)) {
-          fillRow(row);
-        }
-      }
-    }
-  
-    while (true) {
-      // Copy the board and shuffle rows
-      const tempBoard = board.map((row) => [...row]);
-      shuffleRows();
-  
-      // Check if columns are balanced for the shuffled rows
-      let isBalanced = true;
-      for (let col = 0; col < size; col++) {
-        const column = getColumn(tempBoard, col);
-        const counts = countColors(column);
-        let blackCount = counts[1] || 0;
-        let whiteCount = counts[2] || 0;
-        const halfCount = Math.floor(size / 2);
-  
-        if (blackCount !== halfCount || whiteCount !== halfCount) {
-          isBalanced = false;
-          break;
-        }
-      }
-  
-      if (isBalanced) {
-        // If the columns are balanced for the shuffled rows, update the original board
-        for (let row = 0; row < size; row++) {
-          for (let col = 0; col < size; col++) {
-            board[row][col] = tempBoard[row][col];
-          }
-        }
-        break;
-      }
-    }
-  
-    return board;
-  }

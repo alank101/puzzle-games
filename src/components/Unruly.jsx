@@ -1,20 +1,13 @@
 import React from "react";
-import { useState, useEffect } from "react";
-import { getCellClasses, generateSolvedBoard } from './UnrulyFunctions'
+import { useState } from "react";
+import { getCellClasses } from './UnrulyFunctions'
+import { eight, generateBoard } from './UnrulyBoards'
 
 export default function Unruly() {
-    // const [colors, setColors] = useState(gameBoard)
+    const [selectedBoardSize, setSelectedBoardSize] = useState(eight)
     const [currentBoardArray, setCurrentBoardArray] = useState(() => {
-        return generateSolvedBoard(8)
+        return generateBoard(selectedBoardSize)
     });
-    const [selectedBoardSize, setSelectedBoardSize] = useState(8)
-
-
-    useEffect(() => {
-        newGame(selectedBoardSize);
-    }, [selectedBoardSize]);
-
-
 
     function handleColorChange(rowIndex, colIndex) {
         const newColors = [...currentBoardArray]
@@ -32,40 +25,44 @@ export default function Unruly() {
         setCurrentBoardArray(newColors)
     }
 
-    function handleBoardSizeChange(event) {
-        const newBoardSize = parseInt(event.target.value, 10);
-        setSelectedBoardSize(newBoardSize)
-    }
+    // function handleBoardSizeChange(event) {
+    //     const newBoardSize = parseInt(event.target.value, 10);
+    //     setSelectedBoardSize(newBoardSize)
+    // }
 
     function newGame() {
-        const newBoard = generateSolvedBoard(selectedBoardSize)
+        const newBoard = generateBoard(selectedBoardSize)
         setCurrentBoardArray(newBoard);
     }
 
     return (
-        <div>
-            <div className="p-2">
-                {currentBoardArray.map((row, rowIndex) => (
-                    <div key={rowIndex} className="flex">
-                        {row.map((value, colIndex) => (
-                            <div
-                                key={colIndex}
-                                onClick={() => handleColorChange(rowIndex, colIndex)}
-                                className={`w-12 h-12 ${getCellClasses(
-                                    value,
-                                    rowIndex,
-                                    colIndex,
-                                    currentBoardArray
-                                )} border-4 m-2`}
-                            >
-                                !
-                            </div>
-                        ))}
-                    </div>
-                ))}
-            </div>
-            <button onClick={newGame}>New Game?</button>
-            <label>Board Size:</label>
+        <div className="flex flex-col items-center justify-center h-screen">
+            <h1 className="text-center text-6xl mb-8">Unruly</h1>
+            <div>
+                <div className="p-2">
+                    {currentBoardArray.map((row, rowIndex) => (
+                        <div key={rowIndex} className="flex">
+                            {row.map((value, colIndex) => (
+                                <div
+                                    key={colIndex}
+                                    onClick={() => handleColorChange(rowIndex, colIndex)} // Changed the function name
+                                    className={`w-12 h-12 ${getCellClasses(
+                                        value,
+                                        rowIndex,
+                                        colIndex,
+                                        currentBoardArray
+                                    )} border-4 m-2`}
+                                >
+                                    !
+                                </div>
+                            ))}
+                        </div>
+                    ))}
+                </div>
+                <div className="text-center">
+                    <button onClick={newGame} className="mt-4 border-black border-4 p-2 rounded-md bg-white">New Game?</button>
+                </div>
+                {/* <label>Board Size:</label>
             <select
                 id="boardSize"
                 value={selectedBoardSize}
@@ -75,7 +72,9 @@ export default function Unruly() {
                 <option value="10">10x10</option>
                 <option value="12">12x12</option>
                 <option value="14">14x14</option>
-            </select>
+            </select> */}
+            </div>
         </div>
     );
+
 }
