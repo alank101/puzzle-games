@@ -11,25 +11,49 @@ export default function Unruly() {
     });
 
     function handleColorChange(rowIndex, colIndex) {
-        const newColors = [...currentBoardArray]
-        const currentValue = newColors[rowIndex][colIndex];
-        switch (currentValue) {
-            case 1:
-                newColors[rowIndex][colIndex] = 2
-                break
-            case 2:
-                newColors[rowIndex][colIndex] = 0
-                break
-            default:
-                newColors[rowIndex][colIndex] = 1
+        const cell = currentBoardArray[rowIndex][colIndex];
+        if (cell.clickable) {
+            const newColors = [...currentBoardArray];
+            const currentValue = newColors[rowIndex][colIndex].value;
+            switch (currentValue) {
+                case 1:
+                    newColors[rowIndex][colIndex].value = 2;
+                    break;
+                case 2:
+                    newColors[rowIndex][colIndex].value = 0;
+                    break;
+                default:
+                    newColors[rowIndex][colIndex].value = 1;
+            }
+            setCurrentBoardArray(newColors);
         }
-        setCurrentBoardArray(newColors)
+        checkWin(rowIndex, colIndex)
     }
 
     // function handleBoardSizeChange(event) {
     //     const newBoardSize = parseInt(event.target.value, 10);
     //     setSelectedBoardSize(newBoardSize)
     // }
+
+    function checkWin(rowIndex, colIndex) {
+        const currentBoardArrayValue = currentBoardArray.flat().reduce((a,b) => a + b.value, 0)
+        const expectedValue = Math.pow((currentBoardArray.length / 2),2) * 6
+        const hasRedText = currentBoardArray.flat().some(cell => {
+            const classes = getCellClasses(cell, rowIndex, colIndex, currentBoardArray);
+            return classes.includes('text-red-500');
+        });
+    
+        const hasRedBorder = currentBoardArray.flat().some(cell => {
+            const classes = getCellClasses(cell, rowIndex, colIndex, currentBoardArray);
+            return classes.includes('border-red-500');
+        });
+    
+        if(currentBoardArrayValue === expectedValue && !hasRedBorder && !hasRedText) {
+            setTimeout(() => {
+                alert("Congratulations! You've solved the puzzle!");
+            }, 100);
+        }
+    }
 
     function newGame() {
         const newBoard = generateBoard(selectedBoardSize)

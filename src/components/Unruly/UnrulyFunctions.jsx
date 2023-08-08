@@ -7,13 +7,13 @@ export function threeInRowCheck(board, rowIndex, colIndex) {
     const isMatchingHorizontal = () => {
         let count = 1;
         let i = colIndex - 1;
-        while (i >= 0 && board[rowIndex][i] === value) {
+        while (i >= 0 && board[rowIndex][i].value === value.value) {
             count++;
             i--;
         }
 
         i = colIndex + 1;
-        while (i < board[rowIndex].length && board[rowIndex][i] === value) {
+        while (i < board[rowIndex].length && board[rowIndex][i].value === value.value) {
             count++;
             i++;
         }
@@ -24,13 +24,13 @@ export function threeInRowCheck(board, rowIndex, colIndex) {
     const isMatchingVertical = () => {
         let count = 1;
         let i = rowIndex - 1;
-        while (i >= 0 && board[i][colIndex] === value) {
+        while (i >= 0 && board[i][colIndex].value === value.value) {
             count++;
             i--;
         }
 
         i = rowIndex + 1;
-        while (i < board.length && board[i][colIndex] === value) {
+        while (i < board.length && board[i][colIndex].value === value.value) {
             count++;
             i++;
         }
@@ -59,7 +59,7 @@ export function getCellClasses(value, rowIndex, colIndex, currentBoardArray) {
     // Add the necessary logic to determine the classes for each cell based on the conditions
     let classes = "";
 
-    switch (value) {
+    switch (value.value) {
         case 0:
             classes = "bg-transparent text-transparent border-black";
             break;
@@ -73,6 +73,10 @@ export function getCellClasses(value, rowIndex, colIndex, currentBoardArray) {
             break;
     }
 
+    if (!value.clickable) {
+        classes += " cursor-not-allowed"; // Apply a 'not-allowed' cursor style
+    }
+
     const boardLength = currentBoardArray[0].length;
 
     const rowCounts = countColors(currentBoardArray[rowIndex]);
@@ -84,10 +88,11 @@ export function getCellClasses(value, rowIndex, colIndex, currentBoardArray) {
             rowDominantCount = rowCounts[color];
         }
     }
-    if (value === rowDominantColor && rowDominantCount > boardLength / 2) {
+    
+    if (value.value === rowDominantColor && rowDominantCount > boardLength / 2) {
         classes += moreThanHalf;
-        if (value === 2) classes = classes.replace('text-white', 'text-red-500');
-        if (value === 1) classes = classes.replace('text-black', 'text-red-500');
+        if (value.value === 1) classes = classes.replace('text-black', 'text-red-500');
+        if (value.value === 2) classes = classes.replace('text-white', 'text-red-500');
     }
 
     const columnCounts = countColors(getColumn(currentBoardArray, colIndex));
@@ -99,10 +104,10 @@ export function getCellClasses(value, rowIndex, colIndex, currentBoardArray) {
             columnDominantCount = columnCounts[color];
         }
     }
-    if (value === columnDominantColor && columnDominantCount > boardLength / 2) {
+    if (value.value === columnDominantColor && columnDominantCount > boardLength / 2) {
         classes += moreThanHalf;
-        if (value === 2) classes = classes.replace('text-white', 'text-red-500');
-        if (value === 1) classes = classes.replace('text-black', 'text-red-500');
+        if (value.value === 1) classes = classes.replace('text-black', 'text-red-500');
+        if (value.value === 2) classes = classes.replace('text-white', 'text-red-500');
     }
 
     const { isMatchingHorizontal, isMatchingVertical } = threeInRowCheck(
@@ -111,17 +116,17 @@ export function getCellClasses(value, rowIndex, colIndex, currentBoardArray) {
         colIndex
     );
 
-    if (value !== 0 && (isMatchingHorizontal() || isMatchingVertical())) {
+    if (value.value !== 0 && (isMatchingHorizontal() || isMatchingVertical())) {
         classes += threeInRow;
     }
-
+    
     return `w-12 h-12 border-4 m-2 ${classes}`;
 }
 
 const countColors = (row) => {
     const rowCounts = { 0: 0, 1: 0, 2: 0 };
     row.forEach((cell) => {
-        rowCounts[cell]++;
+        rowCounts[cell.value]++;
     });
     return rowCounts;
 };
