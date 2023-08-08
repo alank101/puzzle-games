@@ -9,7 +9,7 @@ import Unruly from "./Unruly";
 export default function App() {
 
   return (
-    <div className='bg-gray-500'>
+    <div className='bg-gray-500 h-screen'>
       <Routes>
         <Route path='/' element={<LandingPage />}></Route>
         <Route path='Unruly' element={<Unruly /> }></Route>

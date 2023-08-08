@@ -37,6 +37,11 @@ export default function Unruly() {
 
     return (
         <div className="flex flex-col items-center justify-center h-screen">
+            <div className="absolute top-4 left-4">
+                <button onClick={() => window.history.back()} className="border-black border-2 p-1 rounded-md bg-white">
+                    Back
+                </button>
+            </div>
             <h1 className="text-center text-6xl mb-8">Unruly</h1>
             <div>
                 <div className="p-2">
@@ -61,6 +66,13 @@ export default function Unruly() {
                 </div>
                 <div className="text-center">
                     <button onClick={newGame} className="mt-4 border-black border-4 p-2 rounded-md bg-white">New Game?</button>
+                </div>
+                <p className="text-center pt-4">There should be an equal number of black and white squares</p>
+                <p className="text-center">No more than 2 consecutive squares should be the same color</p>
+                <div className="text-center">
+                    <a href="https://www.chiark.greenend.org.uk/~sgtatham/puzzles/doc/unruly.html#unruly" target="_blank" rel="noopener noreferrer" className="cursor-pointer text-cyan-300 underline decoration-1">
+                        Full Instructions
+                    </a>
                 </div>
                 {/* <label>Board Size:</label>
             <select
