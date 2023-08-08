@@ -105,8 +105,18 @@ const eight = [
 
 //will add 10x10, 12x12, 14x14 boards
 function generateBoard(boardArrays) {
-    const randomIndex = Math.floor(Math.random() * boardArrays.length)
-    return boardArrays[randomIndex]
+    const randomIndex = Math.floor(Math.random() * boardArrays.length);
+    const generatedBoard = boardArrays[randomIndex];
+
+    // Add the 'clickable' property to each cell
+    const boardWithClickability = generatedBoard.map(row =>
+        row.map(cellValue => ({
+            value: cellValue,
+            clickable: cellValue === 0 // Set clickable to true for value 0 cells
+        }))
+    );
+
+    return boardWithClickability;
 }
 
 export { eight, generateBoard }
