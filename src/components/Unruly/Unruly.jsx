@@ -4,6 +4,7 @@ import { getCellClasses } from './UnrulyFunctions'
 import { eight, generateBoard } from './UnrulyBoards'
 
 export default function Unruly() {
+    // eslint-disable-next-line no-unused-vars
     const [selectedBoardSize, setSelectedBoardSize] = useState(eight)
     const [currentBoardArray, setCurrentBoardArray] = useState(() => {
         return generateBoard(selectedBoardSize)
