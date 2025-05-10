@@ -140,6 +140,14 @@ export default function TicTacToe() {
 
     return (
         <div className="flex flex-col items-center gap-5 p-5 max-w-2xl mx-auto">
+            <div className="absolute top-6 left-6">
+                <button 
+                    onClick={() => window.history.back()} 
+                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200"
+                >
+                    Back
+                </button>
+            </div>
             <div className="flex flex-col gap-4 items-center">
                 <div className="flex gap-5 items-center">
                     <label className="flex items-center gap-2">
