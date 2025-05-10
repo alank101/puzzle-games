@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Unruly from '../images/Unruly.png'
 import Connect_4 from '../images/Connect_4.png'
 import Placeholder from '../images/Placeholder.png'
+import TicTacToe from "./TicTacToe/TicTacToe";
 
 export default function LandingPage() {
     return (
@@ -23,6 +24,12 @@ export default function LandingPage() {
                         <Link to='/Unruly' className="flex flex-col items-center">
                             <img src={Unruly} alt='' className="w-64 h-64" />
                             <span>Unruly</span>
+                        </Link>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                        <Link to='/TicTacToe' className="flex flex-col items-center">
+                            <img src={TicTacToe} alt='' className="w-64 h-64" />
+                            <span>Tic Tac Toe</span>
                         </Link>
                     </div>
                 </div>
