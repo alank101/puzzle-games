@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { getCellClasses } from './UnrulyFunctions'
+import { getCellClasses, checkInvalidPatterns, checkMoreThanHalf } from './UnrulyFunctions'
 import { generateBoard } from './UnrulyBoards'
 
 export default function Unruly() {
@@ -60,21 +60,24 @@ export default function Unruly() {
     }
 
     // Calculate cell size based on board size
-    const cellSize = selectedBoardSize <= 8 ? 'w-12 h-12' : 'w-10 h-10';
-    const cellMargin = selectedBoardSize <= 8 ? 'm-2' : 'm-1';
+    const cellSize = selectedBoardSize <= 8 ? 'w-14 h-14' : 'w-12 h-12';
+    const cellMargin = selectedBoardSize <= 8 ? 'm-1.5' : 'm-1';
     const cellBorder = selectedBoardSize <= 8 ? 'border-4' : 'border-2';
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen p-4">
-            <div className="absolute top-4 left-4">
-                <button onClick={() => window.history.back()} className="border-black border-2 p-1 rounded-md bg-white">
+        <div className="flex flex-col items-center justify-center min-h-screen p-6 bg-white">
+            <div className="absolute top-6 left-6">
+                <button 
+                    onClick={() => window.history.back()} 
+                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200"
+                >
                     Back
                 </button>
             </div>
-            <h1 className="text-center text-4xl md:text-6xl mb-4 md:mb-8">Unruly</h1>
-            <div className="w-full max-w-3xl">
-                <div className="p-2 overflow-x-auto">
-                    <div className="inline-block">
+            <h1 className="text-center text-4xl md:text-6xl font-bold text-gray-900 mb-6 md:mb-10 tracking-tight">Unruly</h1>
+            <div className="w-full max-w-4xl bg-white rounded-xl shadow-lg p-6">
+                <div className="p-4 overflow-x-auto flex justify-center">
+                    <div className="inline-block bg-gray-300 p-6 rounded-lg">
                         {currentBoardArray.map((row, rowIndex) => (
                             <div key={rowIndex} className="flex">
                                 {row.map((value, colIndex) => (
@@ -86,35 +89,45 @@ export default function Unruly() {
                                             rowIndex,
                                             colIndex,
                                             currentBoardArray
-                                        )}`}
+                                        )} transition-colors duration-200`}
                                     >
-                                        !
+                                        {checkMoreThanHalf(currentBoardArray, rowIndex, colIndex) ? '!' : ''}
                                     </div>
                                 ))}
                             </div>
                         ))}
                     </div>
                 </div>
-                <div className="text-center">
-                    <button onClick={newGame} className="mt-4 border-black border-4 p-2 rounded-md bg-white">New Game?</button>
-                </div>
-                <div className="flex justify-center items-center gap-4 mt-4">
-                    <label className="flex items-center gap-2">
-                        Board Size:
-                        <select
-                            value={selectedBoardSize}
-                            onChange={handleBoardSizeChange}
-                            className="px-2 py-1 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
-                        >
-                            <option value={8}>8x8</option>
-                            <option value={10}>10x10</option>
-                        </select>
-                    </label>
-                </div>
-                <p className="text-center pt-4">There should be an equal number of black and white squares in each row and column</p>
-                <p className="text-center">No more than 2 consecutive squares should be the same color</p>
-                <div className="text-center">
-                    <a href="https://www.chiark.greenend.org.uk/~sgtatham/puzzles/doc/unruly.html#unruly" target="_blank" rel="noopener noreferrer" className="cursor-pointer text-cyan-300 underline decoration-1">
+                <div className="flex flex-col items-center space-y-6 mt-6">
+                    <button 
+                        onClick={newGame} 
+                        className="px-6 py-3 text-base font-medium text-white bg-indigo-600 rounded-lg shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200"
+                    >
+                        New Game
+                    </button>
+                    <div className="flex items-center gap-4">
+                        <label className="flex items-center gap-3 text-gray-700 font-medium">
+                            Board Size:
+                            <select
+                                value={selectedBoardSize}
+                                onChange={handleBoardSizeChange}
+                                className="px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                            >
+                                <option value={8}>8x8</option>
+                                <option value={10}>10x10</option>
+                            </select>
+                        </label>
+                    </div>
+                    <div className="text-center space-y-2 text-gray-600">
+                        <p className="text-sm">There should be an equal number of black and white squares in each row and column</p>
+                        <p className="text-sm">No more than 2 consecutive squares should be the same color</p>
+                    </div>
+                    <a 
+                        href="https://www.chiark.greenend.org.uk/~sgtatham/puzzles/doc/unruly.html#unruly" 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className="text-sm text-indigo-600 hover:text-indigo-800 underline decoration-1 transition-colors duration-200"
+                    >
                         Full Instructions
                     </a>
                 </div>

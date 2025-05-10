@@ -55,72 +55,136 @@ function getColumn(array, colIndex) {
 }
 
 
-export function getCellClasses(value, rowIndex, colIndex, currentBoardArray) {
-    // Add the necessary logic to determine the classes for each cell based on the conditions
-    let classes = "";
-
-    switch (value.value) {
-        case 0:
-            classes = "bg-transparent text-transparent border-black";
-            break;
-        case 1:
-            classes = "bg-black text-black border-black";
-            break;
-        case 2:
-            classes = "bg-white text-white border-black";
-            break;
-        default:
-            break;
+export function getCellClasses(cell, rowIndex, colIndex, currentBoardArray) {
+    const baseClasses = 'flex items-center justify-center cursor-pointer select-none font-bold text-2xl transition-all duration-200';
+    
+    // Get the value of the cell
+    const value = cell.value;
+    
+    // Base color classes
+    let colorClasses = '';
+    if (value === 1) {
+        colorClasses = 'bg-black border-2 border-black';
+    } else if (value === 2) {
+        colorClasses = 'bg-white border-2 border-black';
+    } else {
+        colorClasses = 'bg-transparent border-black';
     }
 
-    if (!value.clickable) {
-        classes += " cursor-not-allowed"; // Apply a 'not-allowed' cursor style
-    }
+    // Check for consecutive cells (including pre-generated cells)
+    const hasConsecutive = checkConsecutiveCells(currentBoardArray, rowIndex, colIndex);
+    const consecutiveClasses = hasConsecutive ? 'border-red-500' : '';
 
-    const boardLength = currentBoardArray[0].length;
+    // Check for more than half in row/column
+    const hasMoreThanHalf = checkMoreThanHalf(currentBoardArray, rowIndex, colIndex);
+    const moreThanHalfClasses = hasMoreThanHalf ? 'text-red-500' : '';
 
-    const rowCounts = countColors(currentBoardArray[rowIndex]);
-    let rowDominantColor = -1;
-    let rowDominantCount = -1;
-    for (const color in rowCounts) {
-        if (rowCounts[color] > rowDominantCount) {
-            rowDominantColor = parseInt(color);
-            rowDominantCount = rowCounts[color];
+    return `${baseClasses} ${colorClasses} ${consecutiveClasses} ${moreThanHalfClasses}`;
+}
+
+function checkConsecutiveCells(board, rowIndex, colIndex) {
+    const size = board.length;
+    const value = board[rowIndex][colIndex].value;
+    
+    if (value === 0) return false;
+
+    // Check horizontal pattern
+    if (colIndex > 0 && colIndex < size - 1) {
+        const left = board[rowIndex][colIndex - 1].value;
+        const right = board[rowIndex][colIndex + 1].value;
+        if (left === value && right === value) {
+            return true;
         }
     }
-    
-    if (value.value === rowDominantColor && rowDominantCount > boardLength / 2) {
-        classes += moreThanHalf;
-        if (value.value === 1) classes = classes.replace('text-black', 'text-red-500');
-        if (value.value === 2) classes = classes.replace('text-white', 'text-red-500');
-    }
 
-    const columnCounts = countColors(getColumn(currentBoardArray, colIndex));
-    let columnDominantColor = -1;
-    let columnDominantCount = -1;
-    for (const color in columnCounts) {
-        if (columnCounts[color] > columnDominantCount) {
-            columnDominantColor = parseInt(color);
-            columnDominantCount = columnCounts[color];
+    // Check vertical pattern
+    if (rowIndex > 0 && rowIndex < size - 1) {
+        const up = board[rowIndex - 1][colIndex].value;
+        const down = board[rowIndex + 1][colIndex].value;
+        if (up === value && down === value) {
+            return true;
         }
     }
-    if (value.value === columnDominantColor && columnDominantCount > boardLength / 2) {
-        classes += moreThanHalf;
-        if (value.value === 1) classes = classes.replace('text-black', 'text-red-500');
-        if (value.value === 2) classes = classes.replace('text-white', 'text-red-500');
-    }
 
-    const { isMatchingHorizontal, isMatchingVertical } = threeInRowCheck(
-        currentBoardArray,
-        rowIndex,
-        colIndex
-    );
-
-    if (value.value !== 0 && (isMatchingHorizontal() || isMatchingVertical())) {
-        classes += threeInRow;
+    // Check for longer sequences
+    // Horizontal
+    let horizontalCount = 1;
+    // Check left
+    for (let i = colIndex - 1; i >= 0; i--) {
+        if (board[rowIndex][i].value === value) {
+            horizontalCount++;
+        } else {
+            break;
+        }
     }
+    // Check right
+    for (let i = colIndex + 1; i < size; i++) {
+        if (board[rowIndex][i].value === value) {
+            horizontalCount++;
+        } else {
+            break;
+        }
+    }
+    if (horizontalCount >= 3) return true;
+
+    // Vertical
+    let verticalCount = 1;
+    // Check up
+    for (let i = rowIndex - 1; i >= 0; i--) {
+        if (board[i][colIndex].value === value) {
+            verticalCount++;
+        } else {
+            break;
+        }
+    }
+    // Check down
+    for (let i = rowIndex + 1; i < size; i++) {
+        if (board[i][colIndex].value === value) {
+            verticalCount++;
+        } else {
+            break;
+        }
+    }
+    if (verticalCount >= 3) return true;
+
+    return false;
+}
+
+export function checkMoreThanHalf(board, rowIndex, colIndex) {
+    const size = board.length;
+    const value = board[rowIndex][colIndex].value;
     
-    return `w-12 h-12 border-4 m-2 ${classes}`;
+    if (value === 0) return false;
+
+    // Check row count
+    let rowCount = 0;
+    for (let j = 0; j < size; j++) {
+        if (board[rowIndex][j].value === value) {
+            rowCount++;
+        }
+    }
+    if (rowCount > size / 2) {
+        return true;
+    }
+
+    // Check column count
+    let colCount = 0;
+    for (let i = 0; i < size; i++) {
+        if (board[i][colIndex].value === value) {
+            colCount++;
+        }
+    }
+    if (colCount > size / 2) {
+        return true;
+    }
+
+    return false;
+}
+
+// Keep the original checkInvalidPatterns for other uses
+export function checkInvalidPatterns(board, rowIndex, colIndex) {
+    return checkConsecutiveCells(board, rowIndex, colIndex) || 
+           checkMoreThanHalf(board, rowIndex, colIndex);
 }
 
 const countColors = (row) => {
