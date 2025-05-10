@@ -4,13 +4,9 @@ import {default as LandingPage} from './LandingPage'
 import Unruly from "./Unruly/Unruly";
 import TicTacToe from "./TicTacToe/TicTacToe";
 
-
-
-
 export default function App() {
-
   return (
-    <div className='bg-gray-500 h-screen'>
+    <div className='min-h-screen bg-gradient-to-br from-gray-50 to-gray-100'>
       <Routes>
         <Route path='/' element={<LandingPage />}></Route>
         <Route path='Unruly' element={<Unruly /> }></Route>

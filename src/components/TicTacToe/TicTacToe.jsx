@@ -139,7 +139,7 @@ export default function TicTacToe() {
         : `Next player: ${isXNext ? 'X' : 'O'}`;
 
     return (
-        <div className="flex flex-col items-center gap-5 p-5 max-w-2xl mx-auto">
+        <div className="flex flex-col items-center justify-center min-h-screen p-6 bg-white">
             <div className="absolute top-6 left-6">
                 <button 
                     onClick={() => window.history.back()} 
@@ -148,69 +148,78 @@ export default function TicTacToe() {
                     Back
                 </button>
             </div>
-            <div className="flex flex-col gap-4 items-center">
-                <div className="flex gap-5 items-center">
-                    <label className="flex items-center gap-2">
-                        Grid Size:
-                        <select 
-                            value={gridSize} 
-                            onChange={(e) => {
-                                const newSize = Number(e.target.value);
-                                setGridSize(newSize);
-                                setBoard(createEmptyBoard(newSize));
-                                setIsXNext(true);
-                            }}
-                            className="px-2 py-1 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
+
+            <h1 className="text-center text-4xl md:text-6xl font-bold text-gray-900 mb-6 md:mb-10 tracking-tight">Tic Tac Toe</h1>
+
+            <div className="w-full max-w-2xl bg-white rounded-xl shadow-lg p-6">
+                <div className="flex flex-col gap-6 items-center">
+                    <div className="flex flex-wrap gap-4 justify-center">
+                        <label className="flex items-center gap-2">
+                            <span className="text-gray-700 font-medium">Grid Size:</span>
+                            <select 
+                                value={gridSize} 
+                                onChange={(e) => {
+                                    const newSize = Number(e.target.value);
+                                    setGridSize(newSize);
+                                    setBoard(createEmptyBoard(newSize));
+                                    setIsXNext(true);
+                                }}
+                                className="px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                            >
+                                <option value={3}>3x3</option>
+                                <option value={4}>4x4</option>
+                                <option value={5}>5x5</option>
+                            </select>
+                        </label>
+
+                        <label className="flex items-center gap-2">
+                            <span className="text-gray-700 font-medium">Game Mode:</span>
+                            <select 
+                                value={gameMode} 
+                                onChange={(e) => {
+                                    setGameMode(e.target.value);
+                                    resetGame();
+                                }}
+                                className="px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                            >
+                                <option value="computer">vs Computer</option>
+                                <option value="human">vs Human</option>
+                            </select>
+                        </label>
+
+                        <button 
+                            onClick={resetGame}
+                            className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200"
                         >
-                            <option value={3}>3x3</option>
-                            <option value={4}>4x4</option>
-                            <option value={5}>5x5</option>
-                        </select>
-                    </label>
-                    <label className="flex items-center gap-2">
-                        Game Mode:
-                        <select 
-                            value={gameMode} 
-                            onChange={(e) => {
-                                setGameMode(e.target.value);
-                                resetGame();
-                            }}
-                            className="px-2 py-1 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
-                        >
-                            <option value="computer">vs Computer</option>
-                            <option value="human">vs Human</option>
-                        </select>
-                    </label>
-                    <button 
-                        onClick={resetGame}
-                        className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors duration-200"
-                    >
-                        Reset Game
-                    </button>
-                </div>
-                <div className="text-xl font-bold text-gray-700">{status}</div>
-            </div>
-            <div 
-                className="grid gap-1 bg-gray-700 p-1 rounded-lg shadow-lg"
-                style={{ 
-                    gridTemplateColumns: `repeat(${gridSize}, minmax(0, 1fr))`,
-                    gridTemplateRows: `repeat(${gridSize}, minmax(0, 1fr))`
-                }}
-            >
-                {board.map((row, rowIndex) => (
-                    row.map((cell, colIndex) => (
-                        <button
-                            key={`${rowIndex}-${colIndex}`}
-                            className={`w-16 h-16 bg-white text-2xl font-bold transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 ${
-                                !cell ? 'hover:bg-gray-50 cursor-pointer' : 'cursor-not-allowed'
-                            }`}
-                            onClick={() => handleClick(rowIndex, colIndex)}
-                            disabled={cell !== null || (!isXNext && gameMode === 'computer')}
-                        >
-                            {cell}
+                            Reset Game
                         </button>
-                    ))
-                ))}
+                    </div>
+
+                    <div className="text-xl font-semibold text-gray-700">{status}</div>
+
+                    <div 
+                        className="grid gap-2 bg-gray-100 p-4 rounded-lg shadow-inner"
+                        style={{ 
+                            gridTemplateColumns: `repeat(${gridSize}, minmax(0, 1fr))`,
+                            gridTemplateRows: `repeat(${gridSize}, minmax(0, 1fr))`
+                        }}
+                    >
+                        {board.map((row, rowIndex) => (
+                            row.map((cell, colIndex) => (
+                                <button
+                                    key={`${rowIndex}-${colIndex}`}
+                                    className={`w-16 h-16 bg-white text-3xl font-bold rounded-lg shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+                                        !cell ? 'hover:bg-gray-50 cursor-pointer' : 'cursor-not-allowed'
+                                    } ${winner === cell ? 'text-green-600' : ''}`}
+                                    onClick={() => handleClick(rowIndex, colIndex)}
+                                    disabled={cell !== null || (!isXNext && gameMode === 'computer')}
+                                >
+                                    {cell}
+                                </button>
+                            ))
+                        ))}
+                    </div>
+                </div>
             </div>
         </div>
     );
