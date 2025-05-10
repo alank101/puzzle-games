@@ -1,108 +1,4 @@
-//Pregenerated 8x8 boards
-
-const eight = [
-    [
-        [0, 1, 0, 0, 0, 0, 0, 0],
-        [2, 0, 0, 0, 0, 0, 2, 2],
-        [0, 0, 0, 1, 0, 0, 0, 2],
-        [0, 2, 2, 0, 0, 0, 0, 0],
-        [1, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 2, 0, 0],
-        [0, 0, 2, 2, 0, 2, 0, 2]
-    ],
-    [
-        [0, 0, 0, 0, 0, 0, 2, 0],
-        [0, 1, 0, 0, 0, 0, 2, 1],
-        [0, 1, 0, 0, 0, 0, 0, 1],
-        [0, 0, 0, 0, 1, 0, 2, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 2, 2, 0, 0, 0],
-        [0, 1, 0, 0, 0, 0, 1, 0],
-        [1, 0, 1, 0, 0, 1, 0, 0]
-    ],
-    [
-        [1, 0, 1, 0, 2, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 2, 0],
-        [0, 0, 1, 1, 0, 0, 2, 0],
-        [0, 0, 0, 0, 0, 1, 0, 0],
-        [0, 1, 1, 0, 0, 0, 2, 0],
-        [0, 0, 0, 0, 0, 1, 0, 0],
-        [0, 2, 0, 1, 0, 0, 2, 0],
-        [0, 0, 0, 2, 0, 0, 0, 0]
-    ],
-    [
-        [0, 0, 0, 0, 0, 1, 0, 0],
-        [1, 1, 0, 0, 1, 0, 1, 0],
-        [0, 0, 0, 2, 0, 0, 0, 2],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 2, 0, 0, 0, 2, 0],
-        [0, 1, 0, 0, 2, 1, 0, 0],
-        [2, 0, 0, 2, 0, 0, 0, 0],
-        [2, 0, 2, 0, 0, 0, 0, 1]
-    ],
-    [
-        [2, 1, 0, 0, 0, 2, 0, 0],
-        [0, 0, 1, 1, 0, 2, 0, 0],
-        [0, 1, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [1, 0, 2, 0, 0, 1, 1, 0],
-        [0, 2, 0, 0, 1, 0, 0, 1],
-        [0, 0, 1, 0, 0, 0, 0, 1],
-        [2, 0, 0, 0, 0, 0, 0, 0]
-    ],
-    [
-        [0, 0, 1, 0, 1, 0, 1, 0],
-        [1, 0, 0, 2, 0, 0, 2, 0],
-        [2, 2, 0, 0, 0, 0, 0, 0],
-        [0, 1, 0, 0, 0, 1, 0, 0],
-        [2, 0, 0, 0, 1, 0, 0, 2],
-        [0, 0, 0, 0, 0, 0, 1, 0],
-        [0, 1, 0, 0, 0, 0, 0, 2],
-        [0, 0, 0, 2, 1, 0, 1, 0]
-    ],
-    [
-        [0, 0, 0, 0, 0, 1, 2, 0],
-        [2, 0, 0, 0, 2, 0, 0, 1],
-        [0, 1, 1, 0, 0, 0, 2, 0],
-        [0, 0, 0, 0, 0, 2, 0, 0],
-        [0, 0, 2, 0, 0, 0, 0, 0],
-        [0, 2, 2, 0, 0, 0, 0, 2],
-        [0, 0, 0, 0, 2, 2, 0, 0],
-        [2, 0, 0, 0, 0, 0, 0, 0]
-    ],
-    [
-        [2, 0, 2, 1, 0, 0, 0, 0],
-        [0, 1, 0, 0, 0, 0, 0, 0],
-        [2, 0, 0, 0, 0, 0, 1, 0],
-        [0, 0, 0, 0, 1, 0, 1, 0],
-        [0, 1, 0, 0, 0, 0, 0, 0],
-        [2, 0, 2, 0, 0, 1, 0, 0],
-        [0, 0, 0, 0, 0, 1, 2, 0],
-        [0, 0, 0, 0, 1, 0, 1, 1]
-    ],
-    [
-        [0, 2, 0, 0, 0, 0, 0, 0],
-        [0, 0, 1, 0, 0, 1, 1, 0],
-        [0, 0, 1, 0, 1, 0, 0, 0],
-        [0, 2, 0, 0, 0, 0, 0, 2],
-        [0, 0, 0, 0, 0, 2, 0, 0],
-        [1, 1, 0, 0, 2, 0, 0, 0],
-        [0, 0, 0, 1, 0, 0, 0, 0],
-        [0, 2, 0, 0, 2, 0, 2, 0]
-    ],
-    [
-        [2, 0, 0, 1, 1, 0, 0, 1],
-        [0, 0, 0, 1, 0, 0, 0, 0],
-        [0, 2, 0, 0, 1, 0, 0, 0],
-        [1, 0, 1, 0, 0, 0, 0, 2],
-        [0, 0, 0, 0, 0, 0, 0, 2],
-        [0, 0, 2, 0, 0, 2, 2, 0],
-        [0, 0, 0, 0, 0, 0, 1, 0],
-        [0, 1, 0, 0, 0, 2, 0, 0]
-    ]
-]
-
+// Checks if the pregenerated board is valid
 function isValidBoard(board) {
     const size = board.length;
     
@@ -115,10 +11,11 @@ function isValidBoard(board) {
         
         for (let j = 0; j < size; j++) {
             const color = board[i][j];
+            if (color === 0) continue; // Skip empty cells
             if (color === 1) blackCount++;
             if (color === 2) whiteCount++;
             
-            if (color === lastColor && color !== 0) {
+            if (color === lastColor) {
                 consecutiveCount++;
                 if (consecutiveCount > 2) return false;
             } else {
@@ -127,7 +24,10 @@ function isValidBoard(board) {
             lastColor = color;
         }
         
-        if (blackCount !== whiteCount) return false;
+        // Only check counts if the row is complete
+        if (board[i].every(cell => cell !== 0)) {
+            if (blackCount !== whiteCount) return false;
+        }
     }
     
     // Check columns
@@ -139,10 +39,11 @@ function isValidBoard(board) {
         
         for (let i = 0; i < size; i++) {
             const color = board[i][j];
+            if (color === 0) continue; // Skip empty cells
             if (color === 1) blackCount++;
             if (color === 2) whiteCount++;
             
-            if (color === lastColor && color !== 0) {
+            if (color === lastColor) {
                 consecutiveCount++;
                 if (consecutiveCount > 2) return false;
             } else {
@@ -151,44 +52,72 @@ function isValidBoard(board) {
             lastColor = color;
         }
         
-        if (blackCount !== whiteCount) return false;
+        // Only check counts if the column is complete
+        if (board.every(row => row[j] !== 0)) {
+            if (blackCount !== whiteCount) return false;
+        }
     }
     
     return true;
 }
 
+// Creates a valid Unruly Board
 function generateValidBoard(size) {
     const board = Array(size).fill().map(() => Array(size).fill(0));
-    const halfSize = Math.floor(size / 2);
-    
-    // Create initial pattern with alternating colors
-    for (let i = 0; i < size; i++) {
-        for (let j = 0; j < size; j++) {
-            // Create a checkerboard-like pattern
-            if ((i + j) % 2 === 0) {
-                board[i][j] = 1; // Black
-            } else {
-                board[i][j] = 2; // White
+    const maxAttempts = 1000; // Prevent infinite loops
+    let attempts = 0;
+
+    // Fill the board randomly while maintaining rules
+    while (attempts < maxAttempts) {
+        // Try to fill each cell
+        for (let i = 0; i < size; i++) {
+            for (let j = 0; j < size; j++) {
+                if (board[i][j] === 0) {
+                    // Try each color
+                    const colors = [1, 2];
+                    // Shuffle colors to randomize
+                    for (let k = colors.length - 1; k > 0; k--) {
+                        const l = Math.floor(Math.random() * (k + 1));
+                        [colors[k], colors[l]] = [colors[l], colors[k]];
+                    }
+
+                    let validColorFound = false;
+                    for (const color of colors) {
+                        board[i][j] = color;
+                        if (isValidBoard(board)) {
+                            validColorFound = true;
+                            break;
+                        }
+                    }
+
+                    if (!validColorFound) {
+                        // If no valid color found, reset the cell and try again
+                        board[i][j] = 0;
+                        // Reset the entire board and start over
+                        for (let x = 0; x < size; x++) {
+                            for (let y = 0; y < size; y++) {
+                                board[x][y] = 0;
+                            }
+                        }
+                        break;
+                    }
+                }
             }
         }
+
+        // Check if the board is complete
+        if (board.every(row => row.every(cell => cell !== 0))) {
+            break;
+        }
+
+        attempts++;
     }
 
-    // Randomize while maintaining validity
-    for (let attempts = 0; attempts < size * size * 2; attempts++) {
-        // Pick two random cells
-        const i1 = Math.floor(Math.random() * size);
-        const j1 = Math.floor(Math.random() * size);
-        const i2 = Math.floor(Math.random() * size);
-        const j2 = Math.floor(Math.random() * size);
-
-        // Swap if they're different colors
-        if (board[i1][j1] !== board[i2][j2]) {
-            [board[i1][j1], board[i2][j2]] = [board[i2][j2], board[i1][j1]];
-            
-            // Check if the swap created an invalid pattern
-            if (!isValidBoard(board)) {
-                // Swap back if invalid
-                [board[i1][j1], board[i2][j2]] = [board[i2][j2], board[i1][j1]];
+    // If we couldn't generate a valid board, fall back to a checkerboard pattern
+    if (attempts >= maxAttempts) {
+        for (let i = 0; i < size; i++) {
+            for (let j = 0; j < size; j++) {
+                board[i][j] = ((i + j) % 2 === 0) ? 1 : 2;
             }
         }
     }
@@ -233,4 +162,4 @@ function generateBoard(size) {
     return boardWithClickability;
 }
 
-export { eight, generateBoard }
+export { generateBoard }

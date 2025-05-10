@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { getCellClasses, checkInvalidPatterns, checkMoreThanHalf } from './UnrulyFunctions'
+import { getCellClasses, checkMoreThanHalf } from './UnrulyFunctions'
 import { generateBoard } from './UnrulyBoards'
 
 export default function Unruly() {

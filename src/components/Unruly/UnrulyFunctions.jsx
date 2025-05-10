@@ -1,6 +1,3 @@
-const threeInRow = ' border-red-500'
-const moreThanHalf = ' text-center p-2'
-
 export function threeInRowCheck(board, rowIndex, colIndex) {
     const value = board[rowIndex][colIndex];
 
@@ -47,13 +44,6 @@ export function threeInRowCheck(board, rowIndex, colIndex) {
 export function getRandomNumber() {
     return Math.floor(Math.random() * 3);
 }
-
-
-
-function getColumn(array, colIndex) {
-    return array.map((row) => row[colIndex]);
-}
-
 
 export function getCellClasses(cell, rowIndex, colIndex, currentBoardArray) {
     const baseClasses = 'flex items-center justify-center cursor-pointer select-none font-bold text-2xl transition-all duration-200';
@@ -186,12 +176,3 @@ export function checkInvalidPatterns(board, rowIndex, colIndex) {
     return checkConsecutiveCells(board, rowIndex, colIndex) || 
            checkMoreThanHalf(board, rowIndex, colIndex);
 }
-
-const countColors = (row) => {
-    const rowCounts = { 0: 0, 1: 0, 2: 0 };
-    row.forEach((cell) => {
-        rowCounts[cell.value]++;
-    });
-    return rowCounts;
-};
-
